@@ -43,7 +43,46 @@ window.addEventListener('DOMContentLoaded', () => {
 
   const img = new Image();
   img.src = path.join('GameData', 'Worlds', world.name, `${world.name}.png`);
-  img.onload = () => {
+
+  // Simple game state object; will expand as features are added
+  const state = {
+    lastFrameTime: 0,
+    player: {
+      x: 0,
+      y: 0,
+      width: tileWidth,
+      height: tileHeight,
+      speed: 0.2 // pixels per ms
+    },
+    keys: {}
+  };
+
+  window.addEventListener('keydown', e => {
+    state.keys[e.key] = true;
+  });
+
+  window.addEventListener('keyup', e => {
+    delete state.keys[e.key];
+  });
+
+  function update(delta) {
+    const p = state.player;
+    if (state.keys.ArrowUp) {
+      p.y = Math.max(0, p.y - p.speed * delta);
+    }
+    if (state.keys.ArrowDown) {
+      p.y = Math.min(canvas.height - p.height, p.y + p.speed * delta);
+    }
+    if (state.keys.ArrowLeft) {
+      p.x = Math.max(0, p.x - p.speed * delta);
+    }
+    if (state.keys.ArrowRight) {
+      p.x = Math.min(canvas.width - p.width, p.x + p.speed * delta);
+    }
+  }
+
+  function render() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     const tilesPerRow = 8;
     for (let i = 0; i < tiles.length; i++) {
       const tile = tiles[i];
@@ -53,5 +92,22 @@ window.addEventListener('DOMContentLoaded', () => {
       const dy = Math.floor(i / gridWidth) * tileHeight;
       ctx.drawImage(img, sx, sy, tileWidth, tileHeight, dx, dy, tileWidth, tileHeight);
     }
+
+    // Draw player
+    const p = state.player;
+    ctx.fillStyle = 'red';
+    ctx.fillRect(p.x, p.y, p.width, p.height);
+  }
+
+  function gameLoop(timestamp) {
+    const delta = timestamp - state.lastFrameTime;
+    state.lastFrameTime = timestamp;
+    update(delta);
+    render();
+    requestAnimationFrame(gameLoop);
+  }
+
+  img.onload = () => {
+    requestAnimationFrame(gameLoop);
   };
 });
