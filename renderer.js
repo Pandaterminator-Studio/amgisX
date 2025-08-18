@@ -43,7 +43,18 @@ window.addEventListener('DOMContentLoaded', () => {
 
   const img = new Image();
   img.src = path.join('GameData', 'Worlds', world.name, `${world.name}.png`);
-  img.onload = () => {
+
+  // Simple game state object; will expand as features are added
+  const state = {
+    lastFrameTime: 0,
+  };
+
+  function update(delta) {
+    // Placeholder for future state updates
+  }
+
+  function render() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     const tilesPerRow = 8;
     for (let i = 0; i < tiles.length; i++) {
       const tile = tiles[i];
@@ -53,5 +64,17 @@ window.addEventListener('DOMContentLoaded', () => {
       const dy = Math.floor(i / gridWidth) * tileHeight;
       ctx.drawImage(img, sx, sy, tileWidth, tileHeight, dx, dy, tileWidth, tileHeight);
     }
+  }
+
+  function gameLoop(timestamp) {
+    const delta = timestamp - state.lastFrameTime;
+    state.lastFrameTime = timestamp;
+    update(delta);
+    render();
+    requestAnimationFrame(gameLoop);
+  }
+
+  img.onload = () => {
+    requestAnimationFrame(gameLoop);
   };
 });
