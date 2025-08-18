@@ -47,10 +47,38 @@ window.addEventListener('DOMContentLoaded', () => {
   // Simple game state object; will expand as features are added
   const state = {
     lastFrameTime: 0,
+    player: {
+      x: 0,
+      y: 0,
+      width: tileWidth,
+      height: tileHeight,
+      speed: 0.2 // pixels per ms
+    },
+    keys: {}
   };
 
+  window.addEventListener('keydown', e => {
+    state.keys[e.key] = true;
+  });
+
+  window.addEventListener('keyup', e => {
+    delete state.keys[e.key];
+  });
+
   function update(delta) {
-    // Placeholder for future state updates
+    const p = state.player;
+    if (state.keys.ArrowUp) {
+      p.y = Math.max(0, p.y - p.speed * delta);
+    }
+    if (state.keys.ArrowDown) {
+      p.y = Math.min(canvas.height - p.height, p.y + p.speed * delta);
+    }
+    if (state.keys.ArrowLeft) {
+      p.x = Math.max(0, p.x - p.speed * delta);
+    }
+    if (state.keys.ArrowRight) {
+      p.x = Math.min(canvas.width - p.width, p.x + p.speed * delta);
+    }
   }
 
   function render() {
@@ -64,6 +92,11 @@ window.addEventListener('DOMContentLoaded', () => {
       const dy = Math.floor(i / gridWidth) * tileHeight;
       ctx.drawImage(img, sx, sy, tileWidth, tileHeight, dx, dy, tileWidth, tileHeight);
     }
+
+    // Draw player
+    const p = state.player;
+    ctx.fillStyle = 'red';
+    ctx.fillRect(p.x, p.y, p.width, p.height);
   }
 
   function gameLoop(timestamp) {
