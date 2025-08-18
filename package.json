@@ -1,0 +1,13 @@
+{
+  "name": "amgisx-electron",
+  "version": "1.0.0",
+  "description": "Electron-based port of the AmgisX game engine",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo 'No tests specified'"
+  },
+  "devDependencies": {
+    "electron": "^28.2.0"
+  }
+}
