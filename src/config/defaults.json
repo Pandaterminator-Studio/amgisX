@@ -1,0 +1,24 @@
+{
+  "assets": {
+    "manifestPath": "GameData/assets.json"
+  },
+  "audio": {
+    "masterVolume": 0.8,
+    "musicVolume": 0.7,
+    "sfxVolume": 0.9
+  },
+  "input": {
+    "moveUp": "ArrowUp",
+    "moveDown": "ArrowDown",
+    "moveLeft": "ArrowLeft",
+    "moveRight": "ArrowRight",
+    "interact": "Space",
+    "menu": "Escape"
+  },
+  "saves": {
+    "directory": "userData/saves"
+  },
+  "world": {
+    "basePath": "GameData/Worlds"
+  }
+}

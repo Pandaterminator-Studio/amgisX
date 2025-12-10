@@ -1,57 +1,71 @@
-const fs = require('fs');
-const path = require('path');
+const TILES_PER_ROW = 8; // TODO: derive from metadata once available
 
-window.addEventListener('DOMContentLoaded', () => {
-  const basePath = path.join(__dirname, 'GameData', 'Worlds');
-
-  // Load worlds metadata
-  const worldsRaw = fs.readFileSync(path.join(basePath, 'Worlds.wrld'), 'utf-8')
-    .trim()
-    .split('\n');
-  const worlds = worldsRaw.map(line => {
-    const [id, name] = line.split('|');
-    return { id: parseInt(id, 10), name: name.trim() };
-  });
-  const world = worlds[0];
-
-  // Load maps metadata for the selected world
-  const mapsRaw = fs.readFileSync(path.join(basePath, world.name, `${world.name}.maps`), 'utf-8')
-    .trim()
-    .split('\n');
-  const mapInfo = mapsRaw[0].split('|');
-  const mapFileName = mapInfo[1].trim();
-  const mapWidth = parseInt(mapInfo[2], 10);
-  const mapHeight = parseInt(mapInfo[3], 10);
-
-  // Load map data
-  const mapRaw = fs.readFileSync(path.join(basePath, world.name, mapFileName), 'utf-8');
-  const mapParts = mapRaw.split('|');
-  const tileWidth = parseInt(mapParts[2], 10);
-  const tileHeight = parseInt(mapParts[3], 10);
-  const gridWidth = parseInt(mapParts[4], 10);
-  const gridHeight = parseInt(mapParts[5], 10);
-  const tiles = mapParts[6]
-    .split(/,\s*/)
-    .filter(Boolean)
-    .map(n => parseInt(n, 10))
-    .slice(0, gridWidth * gridHeight);
-
-  const canvas = document.getElementById('map');
-  canvas.width = gridWidth * tileWidth;
-  canvas.height = gridHeight * tileHeight;
+function renderMap(canvas, mapData, onError) {
   const ctx = canvas.getContext('2d');
+  canvas.width = mapData.gridWidth * mapData.tileWidth;
+  canvas.height = mapData.gridHeight * mapData.tileHeight;
 
   const img = new Image();
-  img.src = path.join('GameData', 'Worlds', world.name, `${world.name}.png`);
+  img.src = mapData.spriteSheet;
   img.onload = () => {
-    const tilesPerRow = 8;
-    for (let i = 0; i < tiles.length; i++) {
-      const tile = tiles[i];
-      const sx = (tile % tilesPerRow) * tileWidth;
-      const sy = Math.floor(tile / tilesPerRow) * tileHeight;
-      const dx = (i % gridWidth) * tileWidth;
-      const dy = Math.floor(i / gridWidth) * tileHeight;
-      ctx.drawImage(img, sx, sy, tileWidth, tileHeight, dx, dy, tileWidth, tileHeight);
+    for (let i = 0; i < mapData.tiles.length; i++) {
+      const tile = mapData.tiles[i];
+      if (tile < 0) {
+        continue;
+      }
+      const sx = (tile % TILES_PER_ROW) * mapData.tileWidth;
+      const sy = Math.floor(tile / TILES_PER_ROW) * mapData.tileHeight;
+      const dx = (i % mapData.gridWidth) * mapData.tileWidth;
+      const dy = Math.floor(i / mapData.gridWidth) * mapData.tileHeight;
+      ctx.drawImage(
+        img,
+        sx,
+        sy,
+        mapData.tileWidth,
+        mapData.tileHeight,
+        dx,
+        dy,
+        mapData.tileWidth,
+        mapData.tileHeight
+      );
     }
   };
-});
+
+  img.onerror = () => {
+    const error = new Error(`Failed to load sprite sheet at ${mapData.spriteSheet}`);
+    if (typeof onError === 'function') {
+      onError(error);
+    } else {
+      console.error(error);
+    }
+  };
+}
+
+function showStatus(statusEl, message, isError = false) {
+  statusEl.textContent = message;
+  statusEl.classList.toggle('error', isError);
+}
+
+async function bootstrap() {
+  const canvas = document.getElementById('map');
+  const statusEl = document.getElementById('status');
+
+  if (!window.amgis || typeof window.amgis.loadInitialData !== 'function') {
+    showStatus(statusEl, 'Data layer unavailable.', true);
+    return;
+  }
+
+  showStatus(statusEl, 'Loading world data...');
+  const result = await window.amgis.loadInitialData();
+
+  if (!result.ok) {
+    showStatus(statusEl, `Error: ${result.error}`, true);
+    return;
+  }
+
+  const { selectedWorld, currentMap } = result.data;
+  showStatus(statusEl, `World: ${selectedWorld.name} | Map: ${currentMap.name}`);
+  renderMap(canvas, currentMap, error => showStatus(statusEl, `Error: ${error.message}`, true));
+}
+
+window.addEventListener('DOMContentLoaded', bootstrap);
