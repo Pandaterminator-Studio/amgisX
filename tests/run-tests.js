@@ -28,6 +28,13 @@ const { GameApp } = require('../src/core/GameApp');
   const saved = await managers.saves.load('slot-1');
   assert.strictEqual(saved.level, 1, 'SaveSystem failed to persist payload');
 
+  // Smoke check: parse default world snapshot from on-disk GameData
+  const snapshot = await managers.world.loadDefaultWorldSnapshot();
+  assert.ok(snapshot.worlds.length > 0, 'WorldLoader failed to parse worlds');
+  assert.ok(snapshot.world.name, 'WorldLoader missing world name');
+  assert.ok(snapshot.map.gridWidth > 0, 'WorldLoader missing map dimensions');
+  assert.ok(snapshot.map.tiles.length > 0, 'WorldLoader missing tile data');
+
   console.log('All core scaffolding tests passed.');
 })().catch(error => {
   console.error(error);

@@ -1,0 +1,43 @@
+{
+    "activeFile": "Aethelgard/Aethelgard.tmx",
+    "expandedProjectPaths": [
+        ".",
+        "Aethelgard"
+    ],
+    "fileStates": {
+        "Aethelgard/Aethelgard-map001.tsx": {
+            "scaleInDock": 2,
+            "scaleInEditor": 1
+        },
+        "Aethelgard/Aethelgard-map001_at.tsx": {
+            "scaleInDock": 2,
+            "scaleInEditor": 1
+        },
+        "Aethelgard/Aethelgard.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 1039.3333333333333,
+                "y": 282.66666666666663
+            }
+        },
+        "Aethelgard/[Base]BaseChip_pipo.tsx": {
+            "scaleInDock": 2,
+            "scaleInEditor": 1
+        }
+    },
+    "last.imagePath": "/Users/raphaelsente/Documents/GitHub/amgisX/GameData/Worlds/Aethelgard",
+    "openFiles": [
+        "Aethelgard/Aethelgard.tmx",
+        "Aethelgard/Aethelgard-map001.tsx",
+        "Aethelgard/[Base]BaseChip_pipo.tsx"
+    ],
+    "project": "bun.lockb.tiled-project",
+    "recentFiles": [
+        "Aethelgard/[Base]BaseChip_pipo.tsx",
+        "Aethelgard/Aethelgard-map001.tsx",
+        "Aethelgard/Aethelgard.tmx",
+        "Aethelgard/Aethelgard-map001_at.tsx"
+    ],
+    "tileset.lastUsedFormat": "tsx"
+}

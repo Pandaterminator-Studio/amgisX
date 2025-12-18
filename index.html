@@ -3,24 +3,344 @@
 <head>
   <meta charset="UTF-8">
   <title>AmgisX Electron</title>
-  <style>
-    body { margin: 0; font-family: sans-serif; background: #10131a; color: #f5f7fb; }
-    canvas { display: block; }
-    #status {
-      position: absolute;
-      top: 8px;
-      left: 8px;
-      padding: 4px 8px;
-      background: rgba(0, 0, 0, 0.5);
-      border-radius: 4px;
-      font-size: 14px;
-    }
-    #status.error { background: rgba(128, 0, 0, 0.7); }
-  </style>
+  <link rel="stylesheet" href="styles/theme.css">
+  <link rel="stylesheet" href="styles/app.css">
+  <!-- Optional override (create GameData/theme.css to customize) -->
+  <link rel="stylesheet" href="GameData/theme.css">
 </head>
 <body>
-  <div id="status"></div>
-  <canvas id="map"></canvas>
+  <div id="screen-loading" class="screen screen-loading active">
+    <div class="ambient ambient-loading"></div>
+    <div class="panel boot-panel">
+      <div class="crest">
+        <span class="crest-ring"></span>
+        <span class="crest-gem"></span>
+      </div>
+      <p class="kicker">Arcane boot sequence</p>
+      <h1 class="title hero-title">AmgisX Expedition Core</h1>
+      <p id="loading-text" class="muted">Calibrating ley-lines...</p>
+      <div class="progress-wrap">
+        <div class="bar progress-track"><div id="loading-bar"></div></div>
+        <span class="progress-hint">Synchronizing astral cartography</span>
+      </div>
+      <div class="boot-meta">
+        <div>
+          <span class="label">Status</span>
+          <span class="value">Initializing relays</span>
+        </div>
+        <div>
+          <span class="label">Build</span>
+          <span class="value">Prototype 0.1</span>
+        </div>
+      </div>
+      <button id="loading-retry" class="btn-ghost" style="display:none;">Retry Ritual</button>
+    </div>
+  </div>
+
+  <div id="screen-home" class="screen screen-home">
+    <div class="ambient ambient-home"></div>
+    <div class="home-layout">
+      <section class="panel home-card home-menu">
+        <p class="kicker">Guild directive</p>
+        <h1 class="title hero-title">Command Nexus</h1>
+        <p class="muted home-lede">Select the next course of action for your expedition crew.</p>
+        <div class="menu-buttons">
+          <button id="btn-new" class="btn-primary">Begin Expedition</button>
+          <button id="btn-change-operative" class="btn-secondary">Change Operative</button>
+          <button id="btn-continue" class="btn-secondary">Resume Chronicle</button>
+          <button id="btn-saves" class="btn-secondary">Archive &amp; Saves</button>
+          <button id="btn-settings" class="btn-secondary">Sanctum Settings</button>
+          <button id="btn-quit" class="btn-ghost">Exit to Citadel</button>
+        </div>
+      </section>
+      <section class="panel home-card home-intel">
+        <p class="kicker">Recon brief</p>
+        <div class="intel-header">
+          <h2 class="intel-world" id="home-world-name">Awaiting telemetry</h2>
+          <div class="intel-tags">
+            <span class="intel-chip" id="home-world-difficulty">Uncharted</span>
+            <span class="intel-chip" id="home-world-biome">Unknown biome</span>
+          </div>
+        </div>
+        <p class="intel-summary" id="home-world-summary">Tune sensors to receive the latest guild intelligence.</p>
+        <div class="intel-current">
+          <div>
+            <span class="label">Current Map</span>
+            <span class="value" id="home-map-name">Uncharted Sector</span>
+          </div>
+          <div class="intel-tags">
+            <span class="intel-chip" id="home-map-difficulty">Unknown difficulty</span>
+            <span class="intel-chip" id="home-map-threat">Uncatalogued threat</span>
+          </div>
+        </div>
+        <p class="intel-summary" id="home-map-summary">Awaiting recon packet.</p>
+        <div class="intel-stats">
+          <article>
+            <h3>Weather</h3>
+            <p id="home-map-weather">Weather data unavailable.</p>
+          </article>
+          <article>
+            <h3>Terrain</h3>
+            <p id="home-map-terrain">Unknown biome.</p>
+          </article>
+          <article>
+            <h3>Recommended Kit</h3>
+            <p id="home-map-recommendation">Standard expedition kit.</p>
+          </article>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div id="screen-character" class="screen screen-character">
+    <div class="ambient ambient-character"></div>
+    <div class="panel character-panel">
+      <p class="kicker">Vanguard manifest</p>
+      <h1 class="title hero-title">Select Your Operative</h1>
+      <p class="muted">Choose a guild operative to represent your party before the expedition enters the field.</p>
+      <div class="character-grid">
+        <div class="character-form">
+          <label class="field-label" for="select-character-gender">Lineage</label>
+          <select id="select-character-gender"></select>
+          <label class="field-label" for="select-character-variant">Operative</label>
+          <select id="select-character-variant"></select>
+          <p class="muted">Sprites are 32×32 with directional walk cycles. Only Female/Male lineages are currently available.</p>
+          <div class="row">
+            <button id="btn-character-back" class="btn-secondary">Back</button>
+            <button id="btn-character-confirm" class="btn-primary">Deploy</button>
+          </div>
+        </div>
+        <div class="character-preview-card">
+          <canvas id="character-preview" width="220" height="220"></canvas>
+          <div class="direction-controls">
+            <span class="field-label">Facing</span>
+            <div class="direction-buttons">
+              <button type="button" data-character-direction="up">North</button>
+              <button type="button" data-character-direction="left">West</button>
+              <button type="button" data-character-direction="down">South</button>
+              <button type="button" data-character-direction="right">East</button>
+            </div>
+          </div>
+          <p class="muted preview-caption">Tactical stance preview</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="screen-game" class="screen game">
+    <div class="game-wrap">
+      <div class="game-hud">
+        <button id="btn-game-back">Back</button>
+        <button id="btn-audio-toggle" class="hud-audio" aria-pressed="true">Audio: On</button>
+        <label style="display:flex; align-items:center; gap:6px;">
+          <span class="muted">World</span>
+          <select id="select-world"></select>
+        </label>
+        <label style="display:flex; align-items:center; gap:6px;">
+          <span class="muted">Map</span>
+          <select id="select-map"></select>
+        </label>
+        <button id="btn-load-map">Load</button>
+        <button id="btn-engage-combat" class="btn-secondary">Engage Threat</button>
+        <button id="btn-open-inventory" class="btn-secondary">Inventory</button>
+        <button id="btn-open-quests" class="btn-secondary">Quests</button>
+        <span id="game-status" class="muted" style="margin-left: 10px;"></span>
+      </div>
+      <canvas id="map"></canvas>
+      <div id="npc-interaction-hint" class="npc-interact-hint" aria-hidden="true">
+        <div>
+          <p class="kicker" style="margin-bottom:4px;">Nearby contact</p>
+          <p class="npc-interact-name" id="npc-interaction-name">Guild Ally</p>
+        </div>
+        <button id="btn-npc-interact" class="btn-primary" type="button">Talk</button>
+      </div>
+      <div id="quest-hud-card" class="quest-hud-card" aria-live="polite">
+        <p class="kicker" style="margin-bottom:4px;">Tracked quest</p>
+        <h3 id="quest-hud-title">No quest tracked</h3>
+        <p class="muted" id="quest-hud-objective">Select a quest from the log to follow progress.</p>
+      </div>
+      <div id="stamina-hud-card" class="quest-hud-card stamina-hud-card" aria-live="polite">
+        <p class="kicker" style="margin-bottom:4px;">Operative vitality</p>
+        <div id="stamina-bar" class="stamina-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100">
+          <span id="stamina-bar-fill"></span>
+        </div>
+        <p class="muted" id="stamina-hud-readout">Stamina 100 / 100</p>
+      </div>
+      <div id="quest-toast" class="quest-toast" aria-live="assertive"></div>
+    </div>
+  </div>
+
+  <div id="screen-combat" class="screen screen-combat">
+    <div class="ambient ambient-combat"></div>
+    <section class="panel combat-panel">
+      <div class="combat-header">
+        <div>
+          <p class="kicker">Active encounter</p>
+          <h1 class="title hero-title">Battle Relay</h1>
+        </div>
+        <p class="combat-state" id="combat-state-label">Awaiting orders</p>
+      </div>
+      <div class="combat-entities">
+        <article class="combat-card player-card">
+          <p class="field-label" style="margin-bottom:4px;">Operative</p>
+          <h2 id="combat-player-name">Operative</h2>
+          <p class="muted" id="combat-player-rank">Guild Agent</p>
+          <dl>
+            <div>
+              <dt>HP</dt>
+              <dd id="combat-player-hp">--</dd>
+            </div>
+            <div>
+              <dt>Speed</dt>
+              <dd id="combat-player-speed">--</dd>
+            </div>
+          </dl>
+        </article>
+        <article class="combat-card enemy-card">
+          <p class="field-label" style="margin-bottom:4px;">Enemy</p>
+          <h2 id="combat-enemy-name">Unknown</h2>
+          <p class="muted" id="combat-enemy-rank">??</p>
+          <p class="muted" id="combat-enemy-threat">Threat data unavailable.</p>
+          <dl>
+            <div>
+              <dt>HP</dt>
+              <dd id="combat-enemy-hp">--</dd>
+            </div>
+            <div>
+              <dt>Speed</dt>
+              <dd id="combat-enemy-speed">--</dd>
+            </div>
+          </dl>
+        </article>
+      </div>
+      <div class="combat-actions">
+        <button id="btn-combat-attack" class="btn-primary">Attack</button>
+        <button id="btn-combat-defend" class="btn-secondary">Defend</button>
+        <button id="btn-combat-retreat" class="btn-ghost">Retreat</button>
+        <button id="btn-combat-continue" class="btn-primary" style="display:none;">Return to Map</button>
+      </div>
+      <div class="combat-log-panel">
+        <span class="field-label">Battle log</span>
+        <ul id="combat-log" class="combat-log"></ul>
+      </div>
+    </section>
+  </div>
+
+  <div id="screen-saves" class="screen screen-saves">
+    <div class="panel saves-panel">
+      <div class="saves-header">
+        <div>
+          <p class="kicker" style="margin-bottom:6px;">Chronicle archives</p>
+          <h1 class="title">Save Slots</h1>
+          <p class="muted" id="saves-subtitle">Capture or restore expedition states.</p>
+        </div>
+        <div class="saves-header-actions">
+          <button id="btn-saves-refresh" class="btn-secondary" type="button">Refresh</button>
+          <button id="btn-saves-back" class="btn-ghost" type="button">Back</button>
+        </div>
+      </div>
+      <div id="save-slot-list" class="save-slot-list"></div>
+      <p class="muted saves-hint">Saves capture operative, world, map position, inventory, and quests. Deploy to the expedition map at least once before recording a save.</p>
+    </div>
+  </div>
+
+  <div id="screen-settings" class="screen">
+    <div class="panel">
+      <h1 class="title">Settings</h1>
+      <p class="muted">Not implemented yet.</p>
+      <div class="row">
+        <button id="btn-settings-back">Back</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="dialogue-overlay" class="dialogue-overlay" aria-hidden="true">
+    <div class="dialogue-panel">
+      <div class="dialogue-panel-header">
+        <div>
+          <p class="kicker" style="margin-bottom:6px;">Dialogue channel</p>
+          <h2 class="title" id="dialogue-speaker">Unknown NPC</h2>
+          <p class="muted" id="dialogue-role">Guild contact</p>
+        </div>
+        <button id="btn-dialogue-close" class="btn-ghost" type="button">Close</button>
+      </div>
+      <p class="dialogue-text" id="dialogue-text">Awaiting transmission...</p>
+      <div class="dialogue-choices" id="dialogue-choices"></div>
+    </div>
+  </div>
+
+  <div id="inventory-overlay" class="inventory-overlay" aria-hidden="true">
+    <div class="inventory-panel">
+      <div class="inventory-panel-header">
+        <div>
+          <p class="kicker" style="margin-bottom:6px;">Field kit</p>
+          <h2 class="title">Inventory</h2>
+          <p class="muted">Adjust equipment mid-expedition.</p>
+        </div>
+        <button id="btn-inventory-close" class="btn-ghost" type="button">Close</button>
+      </div>
+      <div class="inventory-body">
+        <section class="inventory-equipment">
+          <h3>Equipped Gear</h3>
+          <ul>
+            <li>
+              <span>Weapon</span>
+              <strong id="equipment-slot-weapon">None equipped</strong>
+            </li>
+            <li>
+              <span>Armor</span>
+              <strong id="equipment-slot-armor">None equipped</strong>
+            </li>
+            <li>
+              <span>Accessory</span>
+              <strong id="equipment-slot-accessory">None equipped</strong>
+            </li>
+          </ul>
+        </section>
+        <section class="inventory-pack">
+          <div class="inventory-pack-header">
+            <h3>Pack Items</h3>
+            <p class="muted">Press I to toggle.</p>
+          </div>
+          <div id="inventory-items" class="inventory-items"></div>
+        </section>
+        <section class="inventory-detail">
+          <h3 id="inventory-detail-name">Select an item</h3>
+          <p class="muted" id="inventory-detail-meta"></p>
+          <p id="inventory-detail-description">Choose an item to inspect its stats and available actions.</p>
+          <p class="inventory-detail-stats" id="inventory-detail-stats"></p>
+          <div class="inventory-actions" id="inventory-detail-actions"></div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <div id="quest-overlay" class="quest-overlay" aria-hidden="true">
+    <div class="quest-panel">
+      <div class="quest-panel-header">
+        <div>
+          <p class="kicker" style="margin-bottom:6px;">Mission ledger</p>
+          <h2 class="title">Quest Log</h2>
+          <p class="muted">Monitor objectives and prioritize field efforts.</p>
+        </div>
+        <button id="btn-quest-close" class="btn-ghost" type="button">Close</button>
+      </div>
+      <div class="quest-panel-body">
+        <section class="quest-list-section">
+          <h3>Available Quests</h3>
+          <div id="quest-list" class="quest-list"></div>
+        </section>
+        <section class="quest-detail" aria-live="polite">
+          <h3 id="quest-detail-title">Select a quest</h3>
+          <p class="muted" id="quest-detail-summary">Choose a quest to review its objectives, rewards, and tracked status.</p>
+          <p class="quest-detail-meta" id="quest-detail-meta"></p>
+          <ul id="quest-detail-objectives" class="quest-objectives"></ul>
+          <div class="quest-detail-actions" id="quest-detail-actions"></div>
+        </section>
+      </div>
+    </div>
+  </div>
+
   <script src="renderer.js"></script>
 </body>
 </html>

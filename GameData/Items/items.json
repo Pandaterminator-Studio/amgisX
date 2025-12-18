@@ -1,0 +1,46 @@
+[
+  {
+    "id": "arcblade_mk1",
+    "name": "Arcblade Mk.I",
+    "type": "weapon",
+    "slot": "weapon",
+    "rarity": "Rare",
+    "description": "Guild-issue arcblade that channels auroral charge into every cut.",
+    "attackBonus": 8,
+    "speedBonus": 2,
+    "movementBonus": 18,
+    "starterQuantity": 1
+  },
+  {
+    "id": "prism_ward_plate",
+    "name": "Prism Ward Plate",
+    "type": "armor",
+    "slot": "armor",
+    "rarity": "Epic",
+    "description": "Layered glasssteel that refracts incoming etheric bolts.",
+    "defenseBonus": 5,
+    "maxHpBonus": 25,
+    "movementBonus": -10,
+    "starterQuantity": 1
+  },
+  {
+    "id": "auric_focus_band",
+    "name": "Auric Focus Band",
+    "type": "accessory",
+    "slot": "accessory",
+    "rarity": "Uncommon",
+    "description": "Stabilizes mana flow, sharpening reflexes and speeding incantations.",
+    "speedBonus": 3,
+    "attackBonus": 2,
+    "starterQuantity": 1
+  },
+  {
+    "id": "stormsalve_ampoule",
+    "name": "Stormsalve Ampoule",
+    "type": "consumable",
+    "rarity": "Common",
+    "description": "A volatile tonic that seals wounds when shattered across armor.",
+    "healAmount": 30,
+    "starterQuantity": 3
+  }
+]

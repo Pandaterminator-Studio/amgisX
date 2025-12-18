@@ -1,0 +1,49 @@
+{
+  "zoom": 1.75,
+  "lastCharacterPath": "GameData/Characters/Male/Male 02-2.png",
+  "quests": {
+    "progress": {
+      "cartographers_beacon": {
+        "status": "completed",
+        "completedObjectives": [
+          "anchor_beacon",
+          "briefing",
+          "report_back"
+        ]
+      },
+      "sentinel_cadence": {
+        "status": "completed",
+        "completedObjectives": [
+          "discipline_walk",
+          "receive_cadence"
+        ]
+      }
+    },
+    "trackedQuestId": "sentinel_cadence"
+  },
+  "inventory": {
+    "items": [
+      {
+        "id": "arcblade_mk1",
+        "quantity": 1
+      },
+      {
+        "id": "prism_ward_plate",
+        "quantity": 1
+      },
+      {
+        "id": "auric_focus_band",
+        "quantity": 1
+      },
+      {
+        "id": "stormsalve_ampoule",
+        "quantity": 3
+      }
+    ],
+    "equipment": {
+      "weapon": null,
+      "armor": null,
+      "accessory": null
+    }
+  }
+}

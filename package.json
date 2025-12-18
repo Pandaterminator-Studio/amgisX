@@ -9,5 +9,8 @@
   },
   "devDependencies": {
     "electron": "^28.2.0"
+  },
+  "dependencies": {
+    "fast-xml-parser": "^5.3.3"
   }
 }

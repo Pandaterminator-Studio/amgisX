@@ -1,0 +1,105 @@
+[
+  {
+    "id": "luminary_cartographer",
+    "world": "Aethelgard",
+    "map": "Aethelgard.tmx",
+    "name": "Luminary Cartographer",
+    "role": "Guild Cartographer",
+    "position": { "x": 1180, "y": 620 },
+    "radius": 90,
+    "markerColor": "#8EF0FF",
+    "dialogue": [
+      {
+        "id": "root",
+        "speaker": "Luminary Cartographer",
+        "text": "The auroral stormfront refuses to stay mapped. Every dusk the ley-lines redraw themselves.",
+        "choices": [
+          { "label": "Need any assistance?", "next": "assistance" },
+          { "label": "What stirs these storms?", "next": "storms" },
+          { "label": "I'll be on my way.", "next": "end" }
+        ]
+      },
+      {
+        "id": "assistance",
+        "speaker": "Luminary Cartographer",
+        "text": "If you can anchor a beacon near the western ridge, I could finally trust a chart for more than an hour.",
+        "choices": [
+          { "label": "Consider it done.", "next": "gratitude" },
+          { "label": "Sounds risky.", "next": "risks" }
+        ]
+      },
+      {
+        "id": "storms",
+        "speaker": "Luminary Cartographer",
+        "text": "The phantoms aren't the source. Something subterranean is forcing mana upward like steam through vents.",
+        "choices": [
+          { "label": "Any clues below?", "next": "risks" },
+          { "label": "Stay vigilant.", "next": "end" }
+        ]
+      },
+      {
+        "id": "risks",
+        "speaker": "Luminary Cartographer",
+        "text": "Every scout I've sent returns deafened by thunder. Bring resonant wards if you plan to investigate.",
+        "choices": [
+          { "label": "Thanks for the warning.", "next": "end" }
+        ]
+      },
+      {
+        "id": "gratitude",
+        "speaker": "Luminary Cartographer",
+        "text": "When the beacon is lit, I'll transmit safe passages to the guild board. You'll save countless operatives time.",
+        "choices": [
+          { "label": "I'll report back soon.", "next": "end" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "stormbound_sentinel",
+    "world": "Aethelgard",
+    "map": "Aethelgard.tmx",
+    "name": "Stormbound Sentinel",
+    "role": "Ley-Warden",
+    "position": { "x": 1520, "y": 820 },
+    "radius": 80,
+    "markerColor": "#FF6384",
+    "dialogue": [
+      {
+        "id": "root",
+        "speaker": "Stormbound Sentinel",
+        "text": "Hold, operative. The ridge ahead is a phantasm crucible. Only heartbeats anchored to purpose survive.",
+        "choices": [
+          { "label": "How do I prepare?", "next": "prep" },
+          { "label": "I don't fear specters.", "next": "bold" },
+          { "label": "Understood.", "next": "end" }
+        ]
+      },
+      {
+        "id": "prep",
+        "speaker": "Stormbound Sentinel",
+        "text": "Sync your breathing to the aurora pulses. When the sky flashes violet, strike. When it dims, defend.",
+        "choices": [
+          { "label": "Any gear tips?", "next": "gear" },
+          { "label": "I'll remember the cadence.", "next": "end" }
+        ]
+      },
+      {
+        "id": "gear",
+        "speaker": "Stormbound Sentinel",
+        "text": "Phantoms ignore steel but loathe resonance. Aether bells, tuning forks—anything that sings against the gale.",
+        "choices": [
+          { "label": "I'll improvise.", "next": "end" }
+        ]
+      },
+      {
+        "id": "bold",
+        "speaker": "Stormbound Sentinel",
+        "text": "Confidence is a torch. Pride is dry tinder. Know which one you're holding before the wind arrives.",
+        "choices": [
+          { "label": "Point taken.", "next": "end" }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,76 @@
+[
+  {
+    "id": "cartographers_beacon",
+    "name": "Anchor the Western Beacon",
+    "summary": "Stabilize a beacon west of the ridge so the guild's charts stop redrawing every dusk.",
+    "giver": "Luminary Cartographer",
+    "world": "Aethelgard",
+    "map": "Aethelgard.tmx",
+    "autoTrack": true,
+    "objectives": [
+      {
+        "id": "briefing",
+        "type": "dialogue",
+        "npcId": "luminary_cartographer",
+        "nodeId": "assistance",
+        "description": "Hear the cartographer's request in Aethelgard."
+      },
+      {
+        "id": "anchor_beacon",
+        "type": "location",
+        "world": "Aethelgard",
+        "map": "Aethelgard.tmx",
+        "x": 880,
+        "y": 600,
+        "radius": 140,
+        "description": "Place a resonance beacon near the western ridge marker."
+      },
+      {
+        "id": "report_back",
+        "type": "dialogue",
+        "npcId": "luminary_cartographer",
+        "nodeId": "gratitude",
+        "description": "Report the stabilization to the cartographer."
+      }
+    ],
+    "rewards": {
+      "items": [
+        { "id": "stormsalve_ampoule", "quantity": 1 }
+      ],
+      "notes": "Unlocks improved expedition routes from the cartographer."
+    }
+  },
+  {
+    "id": "sentinel_cadence",
+    "name": "Cadence of the Sentinel",
+    "summary": "Learn the ley-warden's combat cadence and prove your resolve near the crucible ridge.",
+    "giver": "Stormbound Sentinel",
+    "world": "Aethelgard",
+    "map": "Aethelgard.tmx",
+    "objectives": [
+      {
+        "id": "receive_cadence",
+        "type": "dialogue",
+        "npcId": "stormbound_sentinel",
+        "nodeId": "prep",
+        "description": "Collect the sentinel's cadence briefing."
+      },
+      {
+        "id": "discipline_walk",
+        "type": "location",
+        "world": "Aethelgard",
+        "map": "Aethelgard.tmx",
+        "x": 1620,
+        "y": 880,
+        "radius": 120,
+        "description": "Demonstrate steady breathing near the sentinel's crucible."
+      }
+    ],
+    "rewards": {
+      "items": [
+        { "id": "stormsalve_ampoule", "quantity": 1 }
+      ],
+      "notes": "Gain the sentinel's respect and access to cadence drills."
+    }
+  }
+]

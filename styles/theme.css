@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Space+Grotesk:wght@400;500;600&display=swap');
+
+:root {
+  /* Typography */
+  --font-family: 'Space Grotesk', 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Cinzel', 'Cormorant Garamond', serif;
+  --font-size-base: 16px;
+
+  /* Layout */
+  --screen-padding: 40px;
+  --panel-width: 560px;
+  --panel-padding: 26px;
+  --radius: 18px;
+
+  /* Colors */
+  --bg: #050810;
+  --bg-gradient: radial-gradient(circle at 20% 20%, #1a2742 0%, rgba(5, 8, 16, 0.4) 50%), linear-gradient(135deg, #050810 0%, #090f1d 60%, #050810 100%);
+  --panel-bg: rgba(8, 12, 24, 0.78);
+  --panel-accent: rgba(88, 140, 255, 0.18);
+  --text: #f5f5f5;
+  --muted: #9fa5c3;
+  --border: rgba(255, 255, 255, 0.08);
+  --shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+
+  /* Accent */
+  --accent: #8ef0ff;
+  --accent-contrast: #041019;
+  --accent-soft: rgba(142, 240, 255, 0.12);
+  --accent-strong: #ffb347;
+
+  /* Progress bar */
+  --bar-bg: rgba(255, 255, 255, 0.12);
+  --bar-fill: var(--accent);
+
+  /* Buttons */
+  --button-bg: rgba(255, 255, 255, 0.05);
+  --button-text: #f5f5f5;
+  --button-border: rgba(255, 255, 255, 0.2);
+  --button-hover-bg: rgba(255, 255, 255, 0.15);
+  --button-primary-bg: linear-gradient(120deg, #8ef0ff, #72b4ff);
+  --button-primary-text: #041019;
+  --button-secondary-bg: rgba(142, 240, 255, 0.08);
+  --button-secondary-border: rgba(142, 240, 255, 0.45);
+  --button-ghost-border: rgba(255, 255, 255, 0.25);
+  --button-disabled-opacity: 0.5;
+
+  /* Spacing */
+  --gap: 14px;
+}

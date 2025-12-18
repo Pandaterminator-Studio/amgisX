@@ -1,0 +1,25 @@
+/*
+  Theme override example.
+
+  To use it:
+  1) Copy this file to `GameData/theme.css`
+  2) Edit variables below
+
+  This file is loaded after `styles/theme.css`, so any variables
+  you define here override the defaults.
+*/
+
+:root {
+  --bg: #0f1115;
+  --panel-bg: #151922;
+  --text: #f5f7fb;
+  --muted: #b6bfd6;
+  --border: #2a3142;
+  --accent: #6aa6ff;
+  --bar-fill: var(--accent);
+
+  --button-bg: #1b2130;
+  --button-text: #f5f7fb;
+  --button-border: #2a3142;
+  --button-hover-bg: #242c40;
+}

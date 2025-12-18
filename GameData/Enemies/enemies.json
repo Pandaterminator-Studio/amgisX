@@ -1,0 +1,38 @@
+[
+  {
+    "id": "forest-wisp",
+    "name": "Forest Wisp",
+    "rank": "Common",
+    "hp": 42,
+    "attack": 8,
+    "defense": 2,
+    "speed": 12,
+    "threat": "Ethereal sparks that lash out with charged vines.",
+    "rewardExp": 12,
+    "rewardLoot": ["Glow Dust"]
+  },
+  {
+    "id": "crypt-warden",
+    "name": "Crypt Warden",
+    "rank": "Elite",
+    "hp": 70,
+    "attack": 13,
+    "defense": 5,
+    "speed": 9,
+    "threat": "Ancient armor animated by rune fire.",
+    "rewardExp": 26,
+    "rewardLoot": ["Shattered Sigil", "Iron Plate"]
+  },
+  {
+    "id": "marsh-mireling",
+    "name": "Marsh Mireling",
+    "rank": "Common",
+    "hp": 55,
+    "attack": 10,
+    "defense": 3,
+    "speed": 10,
+    "threat": "Bog revenant that drenches targets in corrosive sap.",
+    "rewardExp": 18,
+    "rewardLoot": ["Swamp Resin"]
+  }
+]

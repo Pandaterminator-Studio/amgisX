@@ -57,17 +57,19 @@ class WorldLoader {
     });
   }
 
-  async loadMap(worldName, mapFileName) {
-    const mapPath = path.join(this.config.basePath, worldName, mapFileName);
-    const raw = await fs.readFile(mapPath, 'utf-8');
-    const parts = raw.split('|').map(part => part.trim());
+  _parseLayerPayload(rawLayer, index, mapFileName) {
+    const parts = rawLayer.split('|').map(part => part.trim());
     if (parts.length < 7) {
-      throw new Error(`Map file ${mapFileName} is malformed.`);
+      throw new Error(`Map file ${mapFileName} layer ${index} is malformed.`);
     }
+
+    const layerId = Number.parseInt(parts[0], 10);
+    const layerName = parts[1];
     const tileWidth = Number.parseInt(parts[2], 10);
     const tileHeight = Number.parseInt(parts[3], 10);
     const gridWidth = Number.parseInt(parts[4], 10);
     const gridHeight = Number.parseInt(parts[5], 10);
+
     const tileTokens = parts[6]
       .split(/,\s*/)
       .filter(Boolean)
@@ -75,14 +77,44 @@ class WorldLoader {
         const numericValue = Number.parseInt(token, 10);
         return Number.isNaN(numericValue) ? -1 : numericValue;
       });
+
     const expected = gridWidth * gridHeight;
-    const tiles = tileTokens.slice(0, expected);
+    if (tileTokens.length < expected) {
+      throw new Error(`Map file ${mapFileName} layer ${index} is missing tile data.`);
+    }
+
     return {
+      id: Number.isNaN(layerId) ? index : layerId,
+      name: layerName || `layer-${index}`,
       tileWidth,
       tileHeight,
       gridWidth,
       gridHeight,
-      tiles,
+      tiles: tileTokens.slice(0, expected)
+    };
+  }
+
+  async loadMap(worldName, mapFileName) {
+    const mapPath = path.join(this.config.basePath, worldName, mapFileName);
+    const raw = await fs.readFile(mapPath, 'utf-8');
+    const layerChunks = raw
+      .split(';')
+      .map(chunk => chunk.trim())
+      .filter(Boolean);
+    if (!layerChunks.length) {
+      throw new Error(`Map file ${mapFileName} is malformed.`);
+    }
+
+    const layers = layerChunks.map((chunk, index) => this._parseLayerPayload(chunk, index, mapFileName));
+    const base = layers[0];
+
+    return {
+      tileWidth: base.tileWidth,
+      tileHeight: base.tileHeight,
+      gridWidth: base.gridWidth,
+      gridHeight: base.gridHeight,
+      tiles: base.tiles,
+      layers,
       spriteSheet: path.join(this.config.basePath, worldName, `${worldName}.png`)
     };
   }
